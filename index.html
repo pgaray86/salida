@@ -1,0 +1,783 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Propuestas Especiales - Momentos Únicos</title>
+    <meta name="description" content="Propuestas románticas especiales para crear momentos inolvidables juntos">
+    <style>
+        /* Reset and Base Styles */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #374151;
+            background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 50%, #fdf2f8 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+
+        /* Header Styles */
+        .header {
+            text-align: center;
+            padding: 3rem 1rem;
+        }
+
+        .header-icons {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-bottom: 1rem;
+        }
+
+        .heart-icon {
+            width: 2rem;
+            height: 2rem;
+            color: #ec4899;
+            margin: 0 0.5rem;
+        }
+
+        .main-title {
+            font-size: 3rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #dc2626 0%, #7c3aed 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0 1rem;
+        }
+
+        .subtitle {
+            font-size: 1.25rem;
+            color: #6b7280;
+            max-width: 42rem;
+            margin: 0 auto;
+            line-height: 1.7;
+        }
+
+        /* Proposals Grid */
+        .proposals-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 2rem;
+            padding-bottom: 3rem;
+        }
+
+        /* Proposal Cards */
+        .proposal-card {
+            background: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            overflow: hidden;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            transform: translateY(0);
+        }
+
+        .proposal-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
+
+        .card-image-container {
+            position: relative;
+            overflow: hidden;
+            height: 16rem;
+        }
+
+        .card-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .proposal-card:hover .card-image {
+            transform: scale(1.1);
+        }
+
+        .image-overlay {
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            display: flex;
+            align-items: flex-end;
+            padding: 1.5rem;
+        }
+
+        .proposal-card:hover .image-overlay {
+            opacity: 1;
+        }
+
+        .overlay-text {
+            color: white;
+            font-weight: 500;
+            font-size: 0.875rem;
+            transform: translateY(1rem);
+            transition: transform 0.3s ease;
+        }
+
+        .proposal-card:hover .overlay-text {
+            transform: translateY(0);
+        }
+
+        .card-content {
+            padding: 1.5rem;
+        }
+
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1f2937;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .proposal-card:hover .card-title {
+            color: #ec4899;
+        }
+
+        .card-description {
+            color: #6b7280;
+            margin-bottom: 1rem;
+            line-height: 1.6;
+        }
+
+        .card-footer {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .special-tag {
+            display: flex;
+            align-items: center;
+            color: #ec4899;
+            font-size: 0.875rem;
+            font-weight: 500;
+        }
+
+        .star-icon {
+            width: 1rem;
+            height: 1rem;
+            margin-right: 0.25rem;
+        }
+
+        .click-hint {
+            font-size: 0.875rem;
+            color: #6b7280;
+            background: #f3f4f6;
+            padding: 0.25rem 0.75rem;
+            border-radius: 9999px;
+        }
+
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            padding: 1rem;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: white;
+            border-radius: 1.5rem;
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+            max-width: 42rem;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            animation: slideUp 0.4s ease-out;
+        }
+
+        .modal-header {
+            position: relative;
+        }
+
+        .modal-image {
+            width: 100%;
+            height: 16rem;
+            object-fit: cover;
+            border-radius: 1.5rem 1.5rem 0 0;
+        }
+
+        .close-button {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            background: rgba(255, 255, 255, 0.9);
+            border: none;
+            border-radius: 50%;
+            width: 2.5rem;
+            height: 2.5rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .close-button:hover {
+            background: white;
+            transform: scale(1.1);
+        }
+
+        .close-button svg {
+            width: 1.5rem;
+            height: 1.5rem;
+            color: #6b7280;
+        }
+
+        .modal-header-text {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.7), transparent);
+            padding: 1.5rem;
+            color: white;
+        }
+
+        .modal-title {
+            font-size: 1.875rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+        }
+
+        .modal-subtitle {
+            font-size: 1.125rem;
+            opacity: 0.9;
+        }
+
+        .modal-body {
+            padding: 2rem;
+        }
+
+        .modal-section {
+            margin-bottom: 1.5rem;
+        }
+
+        .section-title {
+            font-size: 1.25rem;
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.75rem;
+        }
+
+        .section-text {
+            color: #6b7280;
+            line-height: 1.7;
+            font-size: 1.125rem;
+        }
+
+        .modal-info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .info-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.75rem;
+        }
+
+        .info-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-top: 0.125rem;
+            flex-shrink: 0;
+        }
+
+        .location-icon {
+            color: #ec4899;
+        }
+
+        .time-icon {
+            color: #7c3aed;
+        }
+
+        .info-title {
+            font-weight: 600;
+            color: #1f2937;
+            margin-bottom: 0.25rem;
+        }
+
+        .info-text {
+            color: #6b7280;
+        }
+
+        .highlight-section {
+            background: linear-gradient(135deg, #fdf2f8 0%, #faf5ff 100%);
+            border-radius: 1rem;
+            padding: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .highlight-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem;
+        }
+
+        .highlight-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+            color: #f59e0b;
+            margin-right: 0.5rem;
+        }
+
+        .highlight-title {
+            font-weight: 600;
+            color: #1f2937;
+        }
+
+        .highlight-text {
+            color: #374151;
+            line-height: 1.6;
+        }
+
+        .modal-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .primary-button {
+            background: linear-gradient(135deg, #ec4899 0%, #f97316 100%);
+            color: white;
+            border: none;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1rem;
+        }
+
+        .primary-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 25px -5px rgba(236, 72, 153, 0.4);
+        }
+
+        .button-icon {
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        .secondary-button {
+            background: #f3f4f6;
+            color: #374151;
+            border: none;
+            font-weight: 600;
+            padding: 1rem 1.5rem;
+            border-radius: 1rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 1rem;
+        }
+
+        .secondary-button:hover {
+            background: #e5e7eb;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes slideUp {
+            from { 
+                opacity: 0;
+                transform: translateY(20px) scale(0.95);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0) scale(1);
+            }
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .main-title {
+                font-size: 2.5rem;
+            }
+            
+            .subtitle {
+                font-size: 1.125rem;
+            }
+            
+            .proposals-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .modal-actions {
+                flex-direction: column;
+            }
+            
+            .modal-info-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header {
+                padding: 2rem 1rem;
+            }
+            
+            .main-title {
+                font-size: 2rem;
+            }
+            
+            .heart-icon {
+                width: 1.5rem;
+                height: 1.5rem;
+            }
+            
+            .modal-body {
+                padding: 1.5rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="header-content">
+                <div class="header-icons">
+                    <svg class="heart-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                    <h1 class="main-title">Propuestas para mi muñeca</h1>
+                    <svg class="heart-icon" viewBox="0 0 24 24" fill="currentColor">
+                        <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                    </svg>
+                </div>
+                <p class="subtitle">
+                    Elige la aventura perfecta para el sábado.
+                </p>
+            </div>
+        </header>
+
+        <!-- Proposals Grid -->
+        <main class="proposals-grid">
+            <!-- Proposal 1: Opcion 1 -->
+            <div class="proposal-card" data-proposal="1">
+                <div class="card-image-container">
+                    <img src="img3.jpg" 
+                         alt="Opcion 1" class="card-image">
+                    <div class="image-overlay">
+                    </div>
+                    <p class="overlay-text">Primera opción</p>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Primera opción</h3>
+                    <p class="card-description">Opción 1 ¿Qué será?</p>
+                    <div class="card-footer">
+                        <div class="special-tag">
+                            <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                            </svg>
+                            <span>Especial para ti</span>
+                        </div>
+                        <div class="click-hint">Click para ver</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposal 2: Picnic en el Parque -->
+            <div class="proposal-card" data-proposal="2">
+                <div class="card-image-container">
+                    <img src="img2.jpg" 
+                         alt="Picnic en el Parque" class="card-image">
+                    <div class="image-overlay">
+                    </div>
+                    <p class="overlay-text">Segunda Opción </p>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Segunda Opción</h3>
+                    <p class="card-description">Hace click para sacarte la duda!!</p>
+                    <div class="card-footer">
+                        <div class="special-tag">
+                            <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                            </svg>
+                            <span>Especial para ti</span>
+                        </div>
+                        <div class="click-hint">Click para ver</div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proposal 3: Noche de Cine -->
+            <div class="proposal-card" data-proposal="3">
+                <div class="card-image-container">
+                    <img src="img1.jpg" 
+                         alt="Noche de Cine" class="card-image">
+                    <div class="image-overlay">
+                        <p class="overlay-text">Tercera Opción</p>
+                    </div>
+                </div>
+                <div class="card-content">
+                    <h3 class="card-title">Tercera Opción</h3>
+                    <p class="card-description">¿Y si esta es la mejor?</p>
+                    <div class="card-footer">
+                        <div class="special-tag">
+                            <svg class="star-icon" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                            </svg>
+                            <span>Especial para ti</span>
+                        </div>
+                        <div class="click-hint">Click para ver</div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <img id="modal-image" src="" alt="" class="modal-image">
+                <button id="close-modal" class="close-button">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="18" y1="6" x2="6" y2="18"></line>
+                        <line x1="6" y1="6" x2="18" y2="18"></line>
+                    </svg>
+                </button>
+                <div class="modal-header-text">
+                    <h2 id="modal-title" class="modal-title"></h2>
+                    <p id="modal-subtitle" class="modal-subtitle"></p>
+                </div>
+            </div>
+
+            <div class="modal-body">
+                <div class="modal-section">
+                    <h3 class="section-title">¿Qué haremos?</h3>
+                    <p id="modal-details" class="section-text"></p>
+                </div>
+
+                <div class="modal-info-grid">
+                    <div class="info-item">
+                        <svg class="info-icon location-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path>
+                            <circle cx="12" cy="10" r="3"></circle>
+                        </svg>
+                        <div>
+                            <h4 class="info-title">Ubicación</h4>
+                            <p id="modal-location" class="info-text"></p>
+                        </div>
+                    </div>
+                    <div class="info-item">
+                        <svg class="info-icon time-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"></circle>
+                            <polyline points="12,6 12,12 16,14"></polyline>
+                        </svg>
+                        <div>
+                            <h4 class="info-title">Hora</h4>
+                            <p id="modal-time" class="info-text"></p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="highlight-section">
+                    <div class="highlight-header">
+                        <svg class="highlight-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+                        </svg>
+                        <h4 class="highlight-title">Algo especial</h4>
+                    </div>
+                    <p id="modal-highlight" class="highlight-text"></p>
+                </div>
+
+                <div class="modal-actions">
+                    <button class="primary-button">
+                        <svg class="button-icon" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                        </svg>
+                        ¡Me encanta esta idea!
+                    </button>
+                    <button id="see-other-options" class="secondary-button">
+                        Ver otras opciones
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Datos de las propuestas
+        const proposals = {
+            1: {
+                title: "Cena Romántica",
+                image: "https://images.pexels.com/photos/3201921/pexels-photo-3201921.jpeg?auto=compress&cs=tinysrgb&w=800",
+                description: "Una velada perfecta bajo las estrellas",
+                details: "Te invito a una cena romantica a un hermoso restaurante para que pasemos una noche hermosa. Vino seleccionado y la mejor compañía que sos vos.",
+                location: "A elección mía",
+                time: "A definir",
+                
+            },
+            2: {
+                title: "Cine o teatro",
+                image: "https://images.pexels.com/photos/1024359/pexels-photo-1024359.jpeg?auto=compress&cs=tinysrgb&w=800",
+                description: "Una noche distinta para disfrutar del arte",
+                details: "Muchos chocolates, cafe y abrazos durante la función",
+                location: "Cine o teatro",
+                time: "A definir",
+                highlight: "Noche de arte"
+            },
+            3: {
+                title: "Noche de caminata",
+                image: "https://images.unsplash.com/photo-1676326761239-d8e6c173b85b?q=80&w=1025&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D",
+                description: "Caminata por algun barrio de la ciudad para charlar y darnos la mano mientras caminamos y buscamos donde comer o que hacer",
+                details: "Caminar de tu mano es como estar en el paraíso, sin apuros, sin tiempos y viendo que nos gustaría hacer.",
+                location: "Algún barrio de CABA",
+                time: "A definir",
+                highlight: "Única condición, caminar tomados de la mano"
+            }
+        };
+
+        // Elementos del DOM
+        const modal = document.getElementById('modal');
+        const closeModalBtn = document.getElementById('close-modal');
+        const seeOtherOptionsBtn = document.getElementById('see-other-options');
+        const proposalCards = document.querySelectorAll('.proposal-card');
+
+        // Elementos del modal
+        const modalImage = document.getElementById('modal-image');
+        const modalTitle = document.getElementById('modal-title');
+        const modalSubtitle = document.getElementById('modal-subtitle');
+        const modalDetails = document.getElementById('modal-details');
+        const modalLocation = document.getElementById('modal-location');
+        const modalTime = document.getElementById('modal-time');
+        const modalHighlight = document.getElementById('modal-highlight');
+
+        // Función para abrir el modal
+        function openModal(proposalId) {
+            const proposal = proposals[proposalId];
+            
+            if (proposal) {
+                // Llenar el modal con los datos de la propuesta
+                modalImage.src = proposal.image;
+                modalImage.alt = proposal.title;
+                modalTitle.textContent = proposal.title;
+                modalSubtitle.textContent = proposal.description;
+                modalDetails.textContent = proposal.details;
+                modalLocation.textContent = proposal.location;
+                modalTime.textContent = proposal.time;
+                modalHighlight.textContent = proposal.highlight;
+                
+                // Mostrar el modal
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden';
+            }
+        }
+
+        // Función para cerrar el modal
+        function closeModal() {
+            modal.classList.remove('active');
+            document.body.style.overflow = 'auto';
+        }
+
+        // Event listeners para las tarjetas de propuestas
+        proposalCards.forEach(card => {
+            card.addEventListener('click', () => {
+                const proposalId = card.getAttribute('data-proposal');
+                openModal(proposalId);
+            });
+        });
+
+        // Event listeners para cerrar el modal
+        closeModalBtn.addEventListener('click', closeModal);
+        seeOtherOptionsBtn.addEventListener('click', closeModal);
+
+        // Cerrar modal al hacer clic fuera del contenido
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal();
+            }
+        });
+
+        // Cerrar modal con la tecla Escape
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape' && modal.classList.contains('active')) {
+                closeModal();
+            }
+        });
+
+        // Prevenir el scroll del body cuando el modal está abierto
+        modal.addEventListener('wheel', (e) => {
+            e.stopPropagation();
+        });
+
+        // Animación suave para las tarjetas al cargar la página
+        document.addEventListener('DOMContentLoaded', () => {
+            proposalCards.forEach((card, index) => {
+                card.style.opacity = '0';
+                card.style.transform = 'translateY(20px)';
+                
+                setTimeout(() => {
+                    card.style.transition = 'opacity 0.6s ease, transform 0.6s ease';
+                    card.style.opacity = '1';
+                    card.style.transform = 'translateY(0)';
+                }, index * 200);
+            });
+        });
+
+        // Efecto de parallax suave en el scroll
+        let ticking = false;
+
+        function updateParallax() {
+            const scrolled = window.pageYOffset;
+            const parallax = document.querySelector('.header');
+            const speed = scrolled * 0.5;
+            
+            if (parallax) {
+                parallax.style.transform = `translateY(${speed}px)`;
+            }
+            
+            ticking = false;
+        }
+
+        function requestTick() {
+            if (!ticking) {
+                requestAnimationFrame(updateParallax);
+                ticking = true;
+            }
+        }
+
+        window.addEventListener('scroll', requestTick);
+    </script>
+</body>
+</html>
